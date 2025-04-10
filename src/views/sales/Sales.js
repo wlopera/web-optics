@@ -4,6 +4,7 @@ import { Table, Button, Navbar, Container, Nav } from "react-bootstrap";
 import { fetchSales } from "../../store/salesSlice";
 import { FaUser, FaSearch, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import GenericTable from "../../components/table/GenericTable";
 
 const Sales = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,35 @@ const Sales = () => {
     }
   }, [dispatch, sales.length]);
 
-  console.log(123, sales);
+  const columns = [
+    { accessor: "date", Header: "Fecha" },
+    { accessor: "client", Header: "Cliente" },
+    { accessor: "description", Header: "Descripción" },
+    { accessor: "total", Header: "Total ($)" },
+    { accessor: "status", Header: "Estado" },
+    { accessor: "action", Header: "Acciones" },
+  ];
+
+  const columnStyle = {
+    padding: "8px",
+    textAlign: "left",
+    backgroundColor: "#f0f0f0",
+  };
+
+  const rowStyle = (index) => ({
+    backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#fff",
+    padding: "8px",
+    textAlign: "left",
+  });
+
+  const onSearch = (row) => {
+    alert(`Searching for: ${row.name}`);
+  };
+
+  const onDelete = (row) => {
+    alert(`Deleting: ${row.name}`);
+  };
+
   return (
     <>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -33,7 +62,14 @@ const Sales = () => {
           </Nav>
         </Container>
       </Navbar>
-
+      <GenericTable
+        columns={columns}
+        rows={sales}
+        columnStyle={columnStyle}
+        rowStyle={rowStyle}
+        onSearch={onSearch}
+        onDelete={onDelete}
+      />
       <div className="container mt-4">
         <div className="d-flex justify-content-between align-items-center mb-0 bg-success text-white px-2 py-1">
           <h3 className="mb-1">ORDENES DE COMPRA</h3>

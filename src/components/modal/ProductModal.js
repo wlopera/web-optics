@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { nanoid } from "nanoid";
 import { useDispatch, useSelector } from "react-redux";
-import "./ProductModal.css";
 import { fetchCatalogProducts } from "../../store/catalogSlide";
+
+import "./ProductModal.css";
 
 const ProductModal = ({ show, onClose, onAddProduct }) => {
   const dispatch = useDispatch();
@@ -88,7 +89,6 @@ const ProductModal = ({ show, onClose, onAddProduct }) => {
               required
             />
           </Form.Group>
-
           <Form.Group controlId="formItemProduct" className="mb-3">
             <Form.Select
               value={product}
@@ -99,7 +99,6 @@ const ProductModal = ({ show, onClose, onAddProduct }) => {
               {renderProductOptions()}
             </Form.Select>
           </Form.Group>
-
           <Form.Group controlId="formItemPrice" className="mb-3">
             <Form.Control
               type="text"
@@ -115,7 +114,6 @@ const ProductModal = ({ show, onClose, onAddProduct }) => {
               // className="label-disabled"
             />
           </Form.Group>
-
           <Form.Group controlId="formItemDescription" className="mb-3">
             <Form.Control
               type="text"
@@ -125,7 +123,6 @@ const ProductModal = ({ show, onClose, onAddProduct }) => {
               required
             />
           </Form.Group>
-
           <Button variant="primary" type="submit" className="w-100 mt-3">
             Agregar
           </Button>

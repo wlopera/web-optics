@@ -1,7 +1,7 @@
 // App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "./components/side/Sidebar";
 import Sales from "./views/sales/Sales";
 import AddSales from "./views/sales/add/AddSales";
 import Products from "./views/products/Products";
