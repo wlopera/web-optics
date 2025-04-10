@@ -186,7 +186,11 @@ const AddSales = () => {
         </Tabs>
 
         <div className="d-flex justify-content-evenly mt-4">
-          <Button variant="danger" type="submit" className="w-25">
+          <Button
+            variant="danger"
+            className="w-25"
+            onClick={() => navigate("/sales")}
+          >
             Cancelar
           </Button>
           <Button variant="primary" type="submit" className="w-25">

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Table, Button, Navbar, Container, Nav } from "react-bootstrap";
+import { Button, Navbar, Container, Nav } from "react-bootstrap";
 import { fetchSales } from "../../store/salesSlice";
 import { FaUser, FaSearch, FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -22,32 +22,39 @@ const Sales = () => {
   }, [dispatch, sales.length]);
 
   const columns = [
-    { accessor: "date", Header: "Fecha" },
-    { accessor: "client", Header: "Cliente" },
-    { accessor: "description", Header: "Descripción" },
-    { accessor: "total", Header: "Total ($)" },
-    { accessor: "status", Header: "Estado" },
-    { accessor: "action", Header: "Acciones" },
+    { accessor: "date", Header: "Fecha", align: "center" },
+    { accessor: "client", Header: "Cliente", align: "left" },
+    { accessor: "description", Header: "Descripción", align: "left" },
+    { accessor: "total", Header: "Total ($)", align: "center" },
+    { accessor: "status", Header: "Estado", align: "center" },
   ];
 
   const columnStyle = {
     padding: "8px",
-    textAlign: "left",
-    backgroundColor: "#f0f0f0",
+    textAlign: "center",
+    backgroundColor: "#00e66f",
+    border: "1px solid #e0e0e0",
   };
 
   const rowStyle = (index) => ({
-    backgroundColor: index % 2 === 0 ? "#f9f9f9" : "#fff",
+    backgroundColor: index % 2 === 0 ? "#e6fff2" : "#fff",
+    border: "1px solid #e0e0e0",
     padding: "8px",
     textAlign: "left",
   });
 
   const onSearch = (row) => {
-    alert(`Searching for: ${row.name}`);
+    alert(`Searching for: ${row.client}`);
   };
 
-  const onDelete = (row) => {
-    alert(`Deleting: ${row.name}`);
+  const actions = {
+    title: "Acciones",
+    record: [{ icon: FaSearch, onClick: onSearch }],
+  };
+
+  const mainAction = {
+    title: "ORDENES DE COMPRA",
+    record: { icon: FaPlus, onClick: () => navigate("/sales/add") },
   };
 
   return (
@@ -62,56 +69,18 @@ const Sales = () => {
           </Nav>
         </Container>
       </Navbar>
+
+      {loading && <p>Cargando ventas...</p>}
+      {error && <p className="text-danger">Error: {error}</p>}
+
       <GenericTable
         columns={columns}
         rows={sales}
         columnStyle={columnStyle}
         rowStyle={rowStyle}
-        onSearch={onSearch}
-        onDelete={onDelete}
+        mainAction={mainAction}
+        actions={actions}
       />
-      <div className="container mt-4">
-        <div className="d-flex justify-content-between align-items-center mb-0 bg-success text-white px-2 py-1">
-          <h3 className="mb-1">ORDENES DE COMPRA</h3>
-          <Button variant="success" onClick={() => navigate("/sales/add")}>
-            <FaPlus size={14} />
-          </Button>
-        </div>
-
-        {loading && <p>Cargando ventas...</p>}
-        {error && <p className="text-danger">Error: {error}</p>}
-
-        <Table striped bordered hover responsive>
-          <thead className="table-primary">
-            <tr className="text-center">
-              {/* <th>ID</th> */}
-              <th>Fecha</th>
-              <th>Cliente</th>
-              <th>Descripción</th>
-              <th>Total ($)</th>
-              <th>Estado</th>
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sales.map((sale) => (
-              <tr key={sale.id}>
-                {/* <td className="text-center">{sale.id}</td> */}
-                <td className="text-center">{sale.date}</td>
-                <td>{sale.client}</td>
-                <td>{sale.description}</td>
-                <td className="text-center">{sale.total}</td>
-                <td className="text-center">{sale.status}</td>
-                <td className="text-center">
-                  <Button variant="outline-primary" size="sm">
-                    <FaSearch />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
     </>
   );
 };

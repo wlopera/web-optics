@@ -1,28 +1,35 @@
 import React from "react";
-import { FaSearch, FaTrash } from "react-icons/fa"; // Importando los iconos
-
-import "./GenericTable.css";
+import { Table, Button } from "react-bootstrap";
 
 const GenericTable = ({
   columns,
   rows,
+  actions,
   columnStyle,
   rowStyle,
-  onSearch,
-  onDelete,
+  mainAction,
 }) => {
+  const IconMain = mainAction.record.icon;
+
   return (
-    <div>
-      <table border="1" style={{ width: "100%", borderCollapse: "collapse" }}>
+    <div className="container mt-4">
+      <div className="d-flex justify-content-between align-items-center mb-0 bg-success text-white px-2 py-1">
+        <h3 className="mb-1">{mainAction.title}</h3>
+        <Button variant="success" onClick={mainAction.record.onClick}>
+          <IconMain size={12} />
+        </Button>
+      </div>
+      <Table striped bordered hover responsive>
         <thead>
-          <tr>
+          <tr className="text-center">
             {columns.map((column) => (
               <th key={column.accessor} style={columnStyle}>
                 {column.Header}
               </th>
             ))}
-            <th style={columnStyle}>Actions</th>{" "}
-            {/* Columna para los íconos de acciones */}
+            {actions && actions.record && actions.record.length > 0 && (
+              <th style={columnStyle}>{actions.title}</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -30,47 +37,42 @@ const GenericTable = ({
             <tr
               key={rowIndex}
               style={rowStyle(rowIndex)}
-              className="table-row" // Clase para el hover de la fila completa
+              className={rowIndex % 2 === 0 ? "bg-light" : ""}
             >
               {columns.map((column) => (
                 <td
                   key={column.accessor}
-                  style={{ padding: "8px", cursor: "pointer" }} // Añadir cursor pointer a todas las celdas
+                  style={{
+                    ...rowStyle(rowIndex),
+                    textAlign: column.align || "center", // Usar el valor de alineación desde cada columna
+                  }}
                 >
                   {row[column.accessor]}
                 </td>
               ))}
-              <td style={{ padding: "8px", textAlign: "center" }}>
-                {/* Iconos para acciones */}
-                <button
-                  onClick={() => onSearch(row)}
-                  style={{
-                    marginRight: "10px",
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                  }}
-                  className="action-icon"
-                >
-                  <FaSearch size={20} /> {/* Icono de búsqueda */}
-                </button>
-                <button
-                  onClick={() => onDelete(row)}
-                  style={{
-                    marginLeft: "10px",
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                  }}
-                  className="action-icon"
-                >
-                  <FaTrash size={20} /> {/* Icono de eliminar */}
-                </button>
-              </td>
+              {actions && actions.record && actions.record.length > 0 && (
+                <td className="text-center" style={rowStyle(rowIndex)}>
+                  {actions.record.map((action, index) => {
+                    const Icon = action.icon;
+
+                    return (
+                      <Button
+                        key={index}
+                        variant="outline-primary"
+                        size="sm"
+                        onClick={() => action.onClick(row)}
+                        className="me-2" // Margen entre botones
+                      >
+                        <Icon size={12} />
+                      </Button>
+                    );
+                  })}
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };
