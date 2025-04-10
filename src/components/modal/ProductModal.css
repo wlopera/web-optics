@@ -1,0 +1,23 @@
+/* Estilo para hacer que el primer modal se vea atenuado */
+.modal-blurred .modal-content {
+  opacity: 0.5; /* Esto reduce la opacidad */
+  pointer-events: none; /* Desactiva la interacción con el modal */
+}
+
+/* Puedes agregar un color de fondo semitransparente si prefieres eso */
+.modal-blurred .modal-content {
+  background-color: rgba(0, 0, 0, 0.3); /* Fondo semitransparente */
+}
+
+/* Opcionalmente, también puedes cambiar el cursor */
+.modal-blurred .modal-header,
+.modal-blurred .modal-body {
+  cursor: not-allowed; /* Esto desactiva las interacciones */
+}
+
+.label-disabled {
+  background-color: #f8f9fa; /* Gris mucho más claro */
+  color: #6c757d; /* Gris más oscuro para el texto */
+  border-color: #ced4da; /* Gris suave para los bordes */
+  cursor: not-allowed; /* Cambia el cursor a "no permitido" */
+}
