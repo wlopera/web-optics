@@ -13,13 +13,13 @@ const GenericTable = ({
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between align-items-center mb-0 bg-success text-white px-2 py-1">
+      <div className="d-flex justify-content-between align-items-center mb-0 bg-success text-white px-2">
         <h3 className="mb-1">{mainAction.title}</h3>
         <Button variant="success" onClick={mainAction.record.onClick}>
           <IconMain size={12} />
         </Button>
       </div>
-      <Table striped bordered hover responsive>
+      <Table striped bordered hover responsive className="mb-0">
         <thead>
           <tr className="text-center">
             {columns.map((column) => (

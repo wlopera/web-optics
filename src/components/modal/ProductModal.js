@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCatalogProducts } from "../../store/catalogSlide";
 
 import "./ProductModal.css";
+import FormInput from "../form/FormInput";
 
-const ProductModal = ({ show, onClose, onAddProduct }) => {
+const ProductModal = ({ show, onClose, onAddProduct, selectedProduct }) => {
   const dispatch = useDispatch();
   const catalog = useSelector((state) => state.catalog.products);
 
@@ -17,22 +18,31 @@ const ProductModal = ({ show, onClose, onAddProduct }) => {
 
   useEffect(() => {
     dispatch(fetchCatalogProducts());
-  }, [dispatch]);
+
+    if (selectedProduct) {
+      setProduct(selectedProduct.product);
+      setQuantity(selectedProduct.quantity);
+      setPrice(selectedProduct.price);
+      setDetails(selectedProduct.description);
+    } else {
+      setProduct("");
+      setQuantity("");
+      setPrice("");
+      setDetails("");
+    }
+  }, [show, selectedProduct, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const newItem = {
-      id: nanoid(),
+      id: selectedProduct ? selectedProduct.id : nanoid(),
       quantity: quantity,
       product: product,
       price: price,
       description: details,
     };
     onAddProduct(newItem);
-    setQuantity("");
-    setProduct("");
-    setPrice("");
-    setDetails("");
   };
 
   const renderProductOptions = () => {
@@ -75,54 +85,52 @@ const ProductModal = ({ show, onClose, onAddProduct }) => {
     <Modal show={show} onHide={onClose} centered dialogClassName="custom-modal">
       <Modal.Header closeButton className="bg-success">
         <Modal.Title className="d-flex justify-content-between align-items-center mb-1 text-white w-100">
-          Agregar Producto
+          {selectedProduct ? "Editar Producto" : "Agregar Producto"}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formItemQuantity" className="mb-3">
-            <Form.Control
-              type="number"
-              placeholder="Cantidad"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              required
-            />
-          </Form.Group>
-          <Form.Group controlId="formItemProduct" className="mb-3">
-            <Form.Select
-              value={product}
-              onChange={handleProductChange}
-              required
-            >
-              <option value="">Seleccione un producto</option>
-              {renderProductOptions()}
-            </Form.Select>
-          </Form.Group>
-          <Form.Group controlId="formItemPrice" className="mb-3">
-            <Form.Control
-              type="text"
-              value={price}
-              readOnly
-              placeholder="Precio"
-              style={{
-                backgroundColor: "#f0f0f0", // Gris claro de fondo
-                color: "#888", // Gris oscuro para el texto
-                borderColor: "#ccc", // Gris en los bordes
-              }}
+          <FormInput
+            controlId="formItemProduct"
+            as="select"
+            value={product}
+            onChange={handleProductChange}
+            required
+          >
+            <option value="">Seleccione un producto</option>
+            {renderProductOptions()}
+          </FormInput>
 
-              // className="label-disabled"
-            />
-          </Form.Group>
-          <Form.Group controlId="formItemDescription" className="mb-3">
-            <Form.Control
-              type="text"
-              placeholder="Descripción"
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
-              required
-            />
-          </Form.Group>
+          <FormInput
+            controlId="formItemPrice"
+            type="text"
+            value={price}
+            readOnly
+            placeholder="Precio"
+            style={{
+              backgroundColor: "#f0f0f0",
+              color: "#888",
+              borderColor: "#ccc",
+            }}
+          />
+
+          <FormInput
+            controlId="formItemQuantity"
+            type="number"
+            placeholder="Introduzca la Cantidad"
+            value={quantity}
+            onChange={(e) => setQuantity(e.target.value)}
+            required
+          />
+
+          <FormInput
+            controlId="formItemDescription"
+            type="text"
+            placeholder="Descripción"
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+          />
+
           <Button variant="primary" type="submit" className="w-100 mt-3">
             Agregar
           </Button>
